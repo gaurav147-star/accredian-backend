@@ -9,6 +9,7 @@ const jwt = require("jsonwebtoken");
 dotenv.config();
 const app = express();
 app.use(express.json()); // to accept json data
+
 app.use(cors());
 app.use(cookieParser());
 const PORT = process.env.PORT || 8000;
@@ -47,13 +48,11 @@ app.post("/api/login", (req, res) => {
             } else {
               // Here, you might generate and send a token for authentication
               const payload = { id: user.id, username: user.username }; // Customize payload as needed
-              const token = jwt.sign(payload, "jwt-secret-key", {
+              const token = jwt.sign(payload, "jwtToken", {
                 expiresIn: "1d",
               });
 
-              res.cookie("token", token, { httpOnly: true }); // Set JWT as a secure, HTTP-only cookie
-
-              res.status(200).json({ message: "Login successful" });
+              res.status(200).json({ message: "Login successful", token });
             }
           });
         } else {
